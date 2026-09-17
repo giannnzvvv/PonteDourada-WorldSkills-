@@ -139,7 +139,7 @@ namespace PonteDourada
 
                 using (var db = new Sessao2Context())
                 {
-                    var product = db.Produtos
+                    var product = db.Produtos.Include(x => x.Fornecedor)
                         .FirstOrDefault(p => p.Nome == selected.Cells["Nome"].Value.ToString());
                     newProduct.ChosenProduct = product;
 
@@ -163,6 +163,21 @@ namespace PonteDourada
                         MessageBox.Show("Produto não encontrado no banco de dados, por favor tente novamente");
                     }
                 }
+
+                newProduct.FormClosed += (s, e) =>
+                {
+                    using (var db = new Sessao2Context())
+                    {
+                        var datas = db.Produtos.Select(p => new DataGridRowForMyOwnProjectWhatever
+                        {
+                            Nome = p.Nome,
+                            Tipo = p.Tipo.Nome,
+                            Validade = p.Validade,
+                            Cadastro = p.DataHoraCadastro
+                        }).ToList();
+                        this.dataGridView1.DataSource = datas;
+                    }
+                };
             }
 
         }

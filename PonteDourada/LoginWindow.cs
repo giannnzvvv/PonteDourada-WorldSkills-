@@ -1,6 +1,7 @@
 using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualBasic.ApplicationServices;
 using PonteDourada.Data;
 using PonteDourada.Properties;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -36,6 +37,9 @@ namespace PonteDourada
                         .Include(u => u.IdNavigation)
                             .ThenInclude(p => p.Cliente)
                         .FirstOrDefault(u => u.Id == Settings.Default.Remembered);
+
+                        Session.CurrentUser = usering;
+
                         if (usering.IdNavigation?.Fornecedor == null)
                         {
                             var request = new SolicitationWindow(this);

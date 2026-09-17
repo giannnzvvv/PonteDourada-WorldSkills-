@@ -77,19 +77,21 @@ namespace PonteDourada
                 }
 
                 if (this.IsEditing) {
-                    this.ChosenProduct.TipoId = (int)comboBox1.SelectedValue;
+                    var j = db.Produtos.FirstOrDefault(p => p.Id == this.ChosenProduct.Id);
 
-                    this.ChosenProduct.Nome = this.textBox1.Text;
-                    this.ChosenProduct.Descricao = this.textBox2.Text;
+                    j.TipoId = (int)comboBox1.SelectedValue;
 
-                    this.ChosenProduct.Estoque = (int)this.numericUpDown1.Value;
-                    this.ChosenProduct.Valor = (double)this.numericUpDown2.Value;
+                    j.Nome = this.textBox1.Text;
+                    j.Descricao = this.textBox2.Text;
 
-                    this.ChosenProduct.Validade = DateOnly.FromDateTime(this.dateTimePicker1.Value);
-                    this.ChosenProduct.DataHoraCadastro = DateTime.Now;
+                    j.Estoque = (int)this.numericUpDown1.Value;
+                    j.Valor = (double)this.numericUpDown2.Value;
 
-                    this.ChosenProduct.Fornecedor = db.Fornecedors.FirstOrDefault(f => f.Id == Session.CurrentUser.Id);
-                    this.ChosenProduct.FornecedorId = Session.CurrentUser.Id;
+                    j.Validade = DateOnly.FromDateTime(this.dateTimePicker1.Value);
+                    j.DataHoraCadastro = DateTime.Now;
+
+                    j.Fornecedor = db.Fornecedors.FirstOrDefault(f => f.Id == Session.CurrentUser.Id);
+                    j.FornecedorId = Session.CurrentUser.Id;
 
                     MessageBox.Show("Produto editado com sucesso!");
                     db.SaveChanges();
