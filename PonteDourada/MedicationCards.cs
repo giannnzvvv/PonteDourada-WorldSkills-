@@ -9,10 +9,10 @@ using System.Windows.Forms;
 
 namespace PonteDourada
 {
-    public partial class ProductCard : UserControl
+    public partial class MedicationCard : UserControl
     {
 
-        public ProductCard()
+        public MedicationCard()
         {
             InitializeComponent();
             this.label2.MouseHover += (a, b) => this.mouseHover();

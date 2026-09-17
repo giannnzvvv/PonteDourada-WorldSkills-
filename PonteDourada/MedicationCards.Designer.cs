@@ -1,6 +1,6 @@
 ﻿namespace PonteDourada
 {
-    partial class ProductCard
+    partial class MedicationCard
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProductCard));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MedicationCard));
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
@@ -106,7 +106,7 @@
             contextMenuStrip1.Size = new Size(61, 4);
             contextMenuStrip1.Opening += contextMenuStrip1_Opening;
             // 
-            // ProductCard
+            // MedicationCard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -118,7 +118,7 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
-            Name = "ProductCard";
+            Name = "MedicationCard";
             Size = new Size(143, 222);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);

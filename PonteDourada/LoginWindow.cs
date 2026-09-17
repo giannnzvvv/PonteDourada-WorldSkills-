@@ -30,29 +30,28 @@ namespace PonteDourada
                 {
                     if (Settings.Default.Remembered != -1)
                     {
-                        var usering = db.Usuarios.FirstOrDefault(x => x.Id == Settings.Default.Remembered);
+                        var usering = db.Usuarios
+                        .Include(u => u.IdNavigation)
+                            .ThenInclude(p => p.Fornecedor)
+                        .Include(u => u.IdNavigation)
+                            .ThenInclude(p => p.Cliente)
+                        .FirstOrDefault(u => u.Id == Settings.Default.Remembered);
+                        if (usering.IdNavigation?.Fornecedor == null)
                         {
-                            if (usering.IdNavigation?.Fornecedor == null)
-                            {
-                                var request = new SolicitationWindow(this);
-                                request.Show();
-                                this.Hide();
-                            }
-                            else
-                            {
-                                var productWindow = new ProductWindow(this);
-                                productWindow.Show();
-                                this.Hide();
-                            }
+                            var request = new SolicitationWindow(this);
+                            request.Show();
+                            this.Hide();
+                        }
+                        else
+                        {
+                            var productWindow = new ProductWindow(this);
+                            productWindow.Show();
+                            this.Hide();
                         }
                     }
                 }
             };
         }
-
-
-            
-           
 
         private async Task login(string username, string password)
         {
@@ -64,7 +63,12 @@ namespace PonteDourada
             using (var db = new Sessao2Context())
             {
 
-                var user = await db.Usuarios.FirstOrDefaultAsync(u => u.Login == $"{this.UserTextBox.Text}");
+                var user = await db.Usuarios
+                        .Include(u => u.IdNavigation)
+                            .ThenInclude(p => p.Fornecedor)
+                        .Include(u => u.IdNavigation)
+                            .ThenInclude(p => p.Cliente)
+                        .FirstOrDefaultAsync(u => u.Login == this.UserTextBox.Text);
                 if (user == null)
                 {
                     MessageBox.Show("Usuario ou senha incorretos.");
@@ -84,13 +88,13 @@ namespace PonteDourada
                     var result = MessageBox.Show("Logado.");
                     if (result == DialogResult.OK || result == DialogResult.None)
                     {
-                        if (user.IdNavigation?.Fornecedor == null)
+                        if (user.IdNavigation?.Cliente != null)
                         {
                             var request = new SolicitationWindow(this);
                             request.Show();
                             this.Hide();
                         }
-                        else
+                        else if (user.IdNavigation?.Fornecedor != null)
                         {
                             var productWindow = new ProductWindow(this);
                             productWindow.Show();

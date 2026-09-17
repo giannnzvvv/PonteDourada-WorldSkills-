@@ -86,7 +86,7 @@ namespace PonteDourada
 
         private void searchProducts()
         {
-            var controls = this.flowLayoutPanel1.Controls.OfType<ProductCard>();
+            var controls = this.flowLayoutPanel1.Controls.OfType<MedicationCard>();
             foreach (var control in controls)
             {
                 control.Visible = control.Title.Contains(this.textBox1.Text, StringComparison.OrdinalIgnoreCase);
@@ -102,7 +102,7 @@ namespace PonteDourada
 
         private void orderProducts(string orderType)
         {
-            var controls = this.flowLayoutPanel1.Controls.OfType<ProductCard>();
+            var controls = this.flowLayoutPanel1.Controls.OfType<MedicationCard>();
             switch (orderType)
             {
                 case "Lastest":

@@ -82,6 +82,7 @@
             dataGridView1.Size = new Size(682, 233);
             dataGridView1.TabIndex = 2;
             dataGridView1.CellFormatting += dataGridView1_CellFormatting;
+            dataGridView1.ColumnHeaderMouseClick += dataGridView1_ColumnHeaderMouseClick;
             // 
             // button1
             // 
