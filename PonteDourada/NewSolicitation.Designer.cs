@@ -146,12 +146,15 @@
             // 
             // flowLayoutPanel2
             // 
+            flowLayoutPanel2.AllowDrop = true;
             flowLayoutPanel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             flowLayoutPanel2.AutoScroll = true;
             flowLayoutPanel2.Location = new Point(12, 617);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
             flowLayoutPanel2.Size = new Size(968, 188);
             flowLayoutPanel2.TabIndex = 6;
+            flowLayoutPanel2.DragDrop += flowLayoutPanel2_DragDrop;
+            flowLayoutPanel2.DragEnter += flowLayoutPanel2_DragEnter;
             // 
             // label4
             // 
