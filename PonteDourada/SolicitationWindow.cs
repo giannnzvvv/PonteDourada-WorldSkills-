@@ -38,7 +38,7 @@ namespace PonteDourada
                     medCard.quantity = solicitacao.Quantidade;
                     medCard.imageOrWhatever = Image.FromFile(Path.Combine("C:\\Users\\antol\\Downloads\\DataFiles\\TiposProdutos", $"{solicitacao.Produto.Tipo.Nome}.png"));
                     medCard.Desc = solicitacao.Solicitcao.Descricao;
-                    medCard.price = (decimal)(solicitacao.Produto.Valor ?? 0);
+                    medCard.price += (decimal)(solicitacao.Produto.Valor * solicitacao.Quantidade ?? 0);
                     var expression = medCard.expiration.DayNumber - DateOnly.FromDateTime(DateTime.Today).DayNumber;
 
 
@@ -145,6 +145,9 @@ namespace PonteDourada
         {
             var newSolicitation = new NewSolicitation();
             newSolicitation.Show();
+
+            newSolicitation.FormClosed += (s, e) => ShowProducts();
+
         }
 
         private void button3_Click(object sender, EventArgs e)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PonteDourada.Data;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -22,11 +23,18 @@ namespace PonteDourada
         }
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+
+        public Produto product { get; set; }
+        [Browsable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string exp { get; set; }
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int discount { get; set; }
+        public double discount { get; set; }
+        [Browsable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public double cashback { get; set; }
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -35,6 +43,16 @@ namespace PonteDourada
             get => this.label1.Text;
             set => this.label1.Text = value;
         }
+
+        [Browsable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public string Type
+        {
+            get; set;
+        }
+        [Browsable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public int estoque { get; set; }
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

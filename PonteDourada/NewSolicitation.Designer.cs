@@ -53,16 +53,17 @@
             label11 = new Label();
             label12 = new Label();
             label13 = new Label();
-            pictureBox2 = new PictureBox();
-            pictureBox3 = new PictureBox();
-            pictureBox4 = new PictureBox();
+            Medicamento = new PictureBox();
+            Higiene = new PictureBox();
+            Equipamento = new PictureBox();
             label14 = new Label();
             label15 = new Label();
             label16 = new Label();
+            label17 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)Medicamento).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)Higiene).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)Equipamento).BeginInit();
             SuspendLayout();
             // 
             // pictureBox1
@@ -172,9 +173,9 @@
             label5.AutoSize = true;
             label5.Location = new Point(36, 846);
             label5.Name = "label5";
-            label5.Size = new Size(82, 15);
+            label5.Size = new Size(97, 15);
             label5.TabIndex = 7;
-            label5.Text = "Desconto: R$0";
+            label5.Text = "Desconto: R$0,00";
             // 
             // label6
             // 
@@ -192,9 +193,9 @@
             label7.AutoSize = true;
             label7.Location = new Point(36, 899);
             label7.Name = "label7";
-            label7.Size = new Size(107, 15);
+            label7.Size = new Size(101, 15);
             label7.TabIndex = 7;
-            label7.Text = "Valor Total: R$00,00";
+            label7.Text = "Valor Total: R$0,00";
             // 
             // checkBox1
             // 
@@ -206,6 +207,7 @@
             checkBox1.TabIndex = 8;
             checkBox1.Text = "Cashback?";
             checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.CheckedChanged += checkBox1_CheckedChanged;
             // 
             // linkLabel1
             // 
@@ -227,6 +229,7 @@
             button1.TabIndex = 10;
             button1.Text = "Salvar";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // button2
             // 
@@ -245,6 +248,7 @@
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(393, 23);
             textBox2.TabIndex = 11;
+            textBox2.TextChanged += textBox2_TextChanged;
             // 
             // label8
             // 
@@ -301,42 +305,45 @@
             // 
             label13.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             label13.AutoSize = true;
-            label13.Font = new Font("Segoe UI", 11F);
-            label13.Location = new Point(698, 292);
+            label13.Font = new Font("Segoe UI", 12F);
+            label13.Location = new Point(744, 292);
             label13.Name = "label13";
-            label13.Size = new Size(156, 20);
+            label13.Size = new Size(160, 21);
             label13.TabIndex = 12;
             label13.Text = "Tipo de medicamento";
             // 
-            // pictureBox2
+            // Medicamento
             // 
-            pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
-            pictureBox2.Location = new Point(744, 315);
-            pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(47, 45);
-            pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox2.TabIndex = 13;
-            pictureBox2.TabStop = false;
+            Medicamento.Image = (Image)resources.GetObject("Medicamento.Image");
+            Medicamento.Location = new Point(744, 315);
+            Medicamento.Name = "Medicamento";
+            Medicamento.Size = new Size(47, 45);
+            Medicamento.SizeMode = PictureBoxSizeMode.StretchImage;
+            Medicamento.TabIndex = 13;
+            Medicamento.TabStop = false;
+            Medicamento.MouseClick += Medicamento_MouseClick;
             // 
-            // pictureBox3
+            // Higiene
             // 
-            pictureBox3.Image = (Image)resources.GetObject("pictureBox3.Image");
-            pictureBox3.Location = new Point(807, 315);
-            pictureBox3.Name = "pictureBox3";
-            pictureBox3.Size = new Size(47, 45);
-            pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox3.TabIndex = 13;
-            pictureBox3.TabStop = false;
+            Higiene.Image = (Image)resources.GetObject("Higiene.Image");
+            Higiene.Location = new Point(807, 315);
+            Higiene.Name = "Higiene";
+            Higiene.Size = new Size(47, 45);
+            Higiene.SizeMode = PictureBoxSizeMode.StretchImage;
+            Higiene.TabIndex = 13;
+            Higiene.TabStop = false;
+            Higiene.MouseClick += Medicamento_MouseClick;
             // 
-            // pictureBox4
+            // Equipamento
             // 
-            pictureBox4.Image = (Image)resources.GetObject("pictureBox4.Image");
-            pictureBox4.Location = new Point(870, 315);
-            pictureBox4.Name = "pictureBox4";
-            pictureBox4.Size = new Size(47, 45);
-            pictureBox4.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox4.TabIndex = 13;
-            pictureBox4.TabStop = false;
+            Equipamento.Image = (Image)resources.GetObject("Equipamento.Image");
+            Equipamento.Location = new Point(870, 315);
+            Equipamento.Name = "Equipamento";
+            Equipamento.Size = new Size(47, 45);
+            Equipamento.SizeMode = PictureBoxSizeMode.StretchImage;
+            Equipamento.TabIndex = 13;
+            Equipamento.TabStop = false;
+            Equipamento.MouseClick += Medicamento_MouseClick;
             // 
             // label14
             // 
@@ -348,6 +355,7 @@
             label14.Size = new Size(79, 13);
             label14.TabIndex = 12;
             label14.Text = "Medicamento";
+            label14.MouseClick += Medicamento_MouseClick;
             // 
             // label15
             // 
@@ -359,6 +367,7 @@
             label15.Size = new Size(47, 13);
             label15.TabIndex = 12;
             label15.Text = "Higiene";
+            label15.MouseClick += Medicamento_MouseClick;
             // 
             // label16
             // 
@@ -370,20 +379,35 @@
             label16.Size = new Size(77, 13);
             label16.TabIndex = 12;
             label16.Text = "Equipamento";
+            label16.MouseClick += Medicamento_MouseClick;
+            // 
+            // label17
+            // 
+            label17.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            label17.AutoSize = true;
+            label17.BackColor = SystemColors.ActiveCaption;
+            label17.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            label17.Location = new Point(665, 330);
+            label17.Name = "label17";
+            label17.Size = new Size(55, 21);
+            label17.TabIndex = 12;
+            label17.Text = "Todos";
+            label17.MouseClick += label17_Click;
             // 
             // NewSolicitation
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(992, 969);
-            Controls.Add(pictureBox4);
-            Controls.Add(pictureBox3);
-            Controls.Add(pictureBox2);
+            Controls.Add(Equipamento);
+            Controls.Add(Higiene);
+            Controls.Add(Medicamento);
             Controls.Add(label9);
             Controls.Add(label12);
             Controls.Add(label11);
             Controls.Add(label16);
             Controls.Add(label15);
+            Controls.Add(label17);
             Controls.Add(label14);
             Controls.Add(label13);
             Controls.Add(label8);
@@ -409,9 +433,9 @@
             Name = "NewSolicitation";
             Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
+            ((System.ComponentModel.ISupportInitialize)Medicamento).EndInit();
+            ((System.ComponentModel.ISupportInitialize)Higiene).EndInit();
+            ((System.ComponentModel.ISupportInitialize)Equipamento).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -442,11 +466,12 @@
         private Label label11;
         private Label label12;
         private Label label13;
-        private PictureBox pictureBox2;
-        private PictureBox pictureBox3;
-        private PictureBox pictureBox4;
+        private PictureBox Medicamento;
+        private PictureBox Higiene;
+        private PictureBox Equipamento;
         private Label label14;
         private Label label15;
         private Label label16;
+        private Label label17;
     }
 }
