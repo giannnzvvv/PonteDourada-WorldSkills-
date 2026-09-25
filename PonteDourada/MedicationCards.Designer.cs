@@ -126,13 +126,12 @@
         }
 
         #endregion
-
-        private Label label1;
         private Label label2;
         private Label label3;
         private Label label4;
         private Label label5;
         private PictureBox pictureBox1;
         public ContextMenuStrip contextMenuStrip1;
+        public Label label1;
     }
 }

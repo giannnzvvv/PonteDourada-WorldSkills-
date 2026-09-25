@@ -22,26 +22,35 @@ namespace PonteDourada
             this.Shown += (s, e) => ShowProducts();
             this.textBox1.TextChanged += (s, e) => searchProducts();
             this.loginWindow = loginWindow;
+
         }
 
         public void ShowProducts()
         {
             using (var db = new Sessao2Context())
             {
-                foreach (var solicitacao in db.ProdutoSolicitacaos.Include(y => y.Solicitcao).Include(y => y.Produto).ThenInclude(y => y.Tipo))
+                foreach (var solicitacao in db.Solicitacaos.Include(y => y.ProdutoSolicitacaos).ThenInclude(y => y.Produto).ThenInclude(y => y.Tipo))
                 {
                     var medCard = new MedicationCard();
-                    var product = solicitacao.Produto;
+                    var lala = new ToolTip();
+                    var products = solicitacao.ProdutoSolicitacaos.ToList();
+                    var idk = products.GroupBy(p => p.Produto.Tipo.Nome).OrderByDescending(g => g.Count()).Take(3).Select(dsffsd => dsffsd.Key).ToList();
+                    medCard.expiration = solicitacao.Validade;
+                    medCard.Title = $"Solicitacao de produtos de {string.Join(", ", idk)}.";
+                    medCard.quantity = solicitacao.ProdutoSolicitacaos.Sum(x => x.Quantidade);
+                    medCard.imageOrWhatever = Image
+                        .FromFile(Path
+                        .Combine("C:\\Users\\antol\\Downloads\\DataFiles\\TiposProdutos", $"{products
+                        .MaxBy(x => x.Quantidade).Produto.Tipo.Nome}.png"));
 
-                    medCard.expiration = solicitacao.Solicitcao.Validade;
-                    medCard.Title = product.Nome;
-                    medCard.quantity = solicitacao.Quantidade;
-                    medCard.imageOrWhatever = Image.FromFile(Path.Combine("C:\\Users\\antol\\Downloads\\DataFiles\\TiposProdutos", $"{solicitacao.Produto.Tipo.Nome}.png"));
-                    medCard.Desc = solicitacao.Solicitcao.Descricao;
-                    medCard.price += (decimal)(solicitacao.Produto.Valor * solicitacao.Quantidade ?? 0);
-                    medCard.cadastro = solicitacao.Solicitcao.DataHoraCadastro;
+                    medCard.id = solicitacao.Id;    
+                    medCard.Desc = solicitacao.Descricao;
+                    medCard.price += (decimal)products.Sum(x => x.Produto.Valor * x.Quantidade);
+                    medCard.cadastro = solicitacao.DataHoraCadastro;
+                    medCard.productNames = products.Select(p => p.Produto.Nome).ToList(); 
                     var expression = medCard.expiration.DayNumber - DateOnly.FromDateTime(DateTime.Today).DayNumber;
 
+                    lala.SetToolTip(medCard.label1, medCard.Title);
 
                     if (expression <= 0)
                     {
@@ -79,6 +88,47 @@ namespace PonteDourada
 
                     }
 
+                    void itemClicked(object snd, ToolStripItemClickedEventArgs erts)
+                    {
+                        if (erts.ClickedItem.Text == "Excluir")
+                        {
+                            using (var db = new Sessao2Context())
+                            {
+                                var resultito = MessageBox.Show("Voce realmente deseja excluir essa solicitacao?", "Aviso!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                                if (resultito == DialogResult.Yes)
+                                {
+                                    var menu = snd as ContextMenuStrip;
+                                    var parent = (MedicationCard)menu.SourceControl;
+
+                                    var solicitacao = db.Solicitacaos
+                                                    .Include(s => s.Cashbacks)
+                                                    .Include(s => s.ProdutoSolicitacaos).ThenInclude(sdsf => sdsf.Produto)
+                                                    .FirstOrDefault(s => s.Id == parent.id);
+                                    foreach (var productSolicitation in solicitacao.ProdutoSolicitacaos)
+                                    {
+                                        productSolicitation.Produto.Estoque += productSolicitation.Quantidade;
+                                    }
+
+                                    db.Cashbacks.RemoveRange(solicitacao.Cashbacks);
+                                    db.ProdutoSolicitacaos.RemoveRange(solicitacao.ProdutoSolicitacaos);
+                                    db.Remove(solicitacao);
+                                    db.SaveChanges();
+                                    this.flowLayoutPanel1.Controls.Remove(medCard);
+                                }
+                            }
+                        } else if (erts.ClickedItem.Text == "Editar")
+                        {
+                            var newSoli = new NewSolicitation(medCard.id);
+                            newSoli.Show();
+                            newSoli.FormClosed += (s, e) => ShowProducts();
+                        } else if (erts.ClickedItem.Text == "Visualizar Detalhes")
+                        {
+                            var details = new Bullshitium(medCard.id);
+                            details.Show();
+                        }
+                    }
+                    medCard.contextMenuStrip1.ItemClicked += itemClicked;
+
                     if (flowLayoutPanel1.Controls.OfType<MedicationCard>().FirstOrDefault(x => x == medCard) == null)
                     {
                         this.flowLayoutPanel1.Controls.Add(medCard);
@@ -93,7 +143,7 @@ namespace PonteDourada
             var controls = this.flowLayoutPanel1.Controls.OfType<MedicationCard>();
             foreach (var control in controls)
             {
-                control.Visible = control.Title.Contains(this.textBox1.Text, StringComparison.OrdinalIgnoreCase);
+                control.Visible = control.productNames.Any(nome => nome.Contains(this.textBox1.Text, StringComparison.OrdinalIgnoreCase));
             }
 
             int index = 0;

@@ -19,9 +19,9 @@ namespace PonteDourada
         double total;
         int totalQuantity;
         double totalDiscount;
-        Dictionary<ProductCards, double> selectedProducts = new Dictionary<ProductCards, double>();
+        Dictionary<ProductCards, int> selectedProducts = new Dictionary<ProductCards, int>();
         // basically, {ProdutoObject = quantity*price}
-        public NewSolicitation()
+        public NewSolicitation(int IdIto = -1)
         {
             InitializeComponent();
 
@@ -33,10 +33,142 @@ namespace PonteDourada
                     .ToList();
             }
 
-            this.Shown += (s, e) => showProductsInThisBullshit();
+            if (IdIto != -1)
+            {
+                this.Shown += (s, e) => showProductsInThisBullshitButSolicitation(IdIto);
+            } else {
+                this.Shown += (s, e) => showProductsInThisBullshitButNoSolicitation();
+            }
         }
 
-        private void showProductsInThisBullshit()
+        private void wtv(ProductCards product)
+        {
+            product.MouseDown += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    product.DoDragDrop(product, DragDropEffects.Move);
+                }
+            };
+        }
+        private void showProductsInThisBullshitButSolicitation(int IdAAA)
+        {
+            using (var db = new Sessao2Context())
+            {
+                var important = db.Solicitacaos
+                .Include(s => s.ProdutoSolicitacaos)
+                    .ThenInclude(ps => ps.Produto)
+                        .ThenInclude(p => p.Tipo)
+                .FirstOrDefault(s => s.Id == IdAAA);
+
+                foreach (var productSolicitation in important.ProdutoSolicitacaos)
+                {
+                    var productCard = new ProductCards();
+                    var product = productSolicitation.Produto;
+
+                    productCard.id = product.Id;
+                    productCard.Title = product.Nome;
+                    productCard.exp = product.Validade.ToString();
+                    productCard.product = product;
+                    productCard.Logo = Image.FromFile(File.Exists($"C:\\Users\\antol\\Downloads\\DataFiles\\Produtos\\{product.Id}.png") ? $"C:\\Users\\antol\\Downloads\\DataFiles\\Produtos\\{product.Id}.png" : "C:\\Users\\antol\\Downloads\\DataFiles\\Produtos\\0.png");
+                    productCard.price = (decimal)product.Valor;
+                    productCard.discount = (double)productSolicitation.Desconto;
+                    productCard.estoque = (int)product.Estoque;
+                    productCard.Type = product.Tipo.Nome;
+
+                    int chosenQuantity = (int)productSolicitation.Quantidade;
+                    this.selectedProducts[productCard] = chosenQuantity;
+
+                    this.totalDiscount += productCard.discount;
+                    this.totalQuantity += chosenQuantity;
+                    this.total += ((double)productCard.price * chosenQuantity) - productCard.discount;
+
+                    changeTextInLabel(this.label5, $"Desconto: R${this.totalDiscount}");
+                    changeTextInLabel(this.label7, $"Valor Total: R${this.total:F2}");
+                    changeTextInLabel(this.label4, $"Quantidade Produtos: {this.totalQuantity}");
+
+                    productCard.ContextMenuStrip = productCard.contextMenuStrip1;
+                    this.flowLayoutPanel2.Controls.Add(productCard);
+   
+                    void menuItemClicked(object sender, ToolStripItemClickedEventArgs e)
+                    {
+                        if (e.ClickedItem is ToolStripMenuItem)
+                        {
+                            if (e.ClickedItem.Text == "Excluir")
+                            {
+                                if (!this.selectedProducts.Remove(productCard)) return;
+
+                                this.flowLayoutPanel1.Controls.Add(productCard);
+                                wtv(productCard);
+                                this.flowLayoutPanel2.Controls.Remove(productCard);
+                                this.totalQuantity -= chosenQuantity;
+                                this.totalDiscount -= productCard.discount;
+                                this.total -= ((double)productCard.price * chosenQuantity) - productCard.discount;
+
+
+                                changeTextInLabel(this.label5, $"Desconto: R${this.totalDiscount}");
+                                changeTextInLabel(this.label7, $"Valor Total: R${this.total:F2}");
+                                changeTextInLabel(this.label4, $"Quantidade Produtos: {this.totalQuantity}");
+                                productCard.ContextMenuStrip = null;
+                            }
+                            else
+                            {
+
+                                AddProductWindow addProduct = new AddProductWindow(productCard);
+                                addProduct.Show();
+                                addProduct.FormClosed += (s, e) =>
+                                {
+                                    if (addProduct.chosenQuantity <= 0)
+                                    {
+                                        this.flowLayoutPanel1.Controls.Add(productCard);
+                                        wtv(productCard);
+                                        this.flowLayoutPanel2.Controls.Remove(productCard);
+                                        this.selectedProducts.Remove(productCard);
+                                        return;
+                                    }
+
+                                    productCard.ContextMenuStrip = productCard.contextMenuStrip1;
+
+                                    var diff = addProduct.chosenQuantity - chosenQuantity;
+                                    this.selectedProducts[productCard] = addProduct.chosenQuantity;
+                                    this.totalQuantity += diff;
+                                    this.total += (double)productCard.price * diff;
+
+                                    chosenQuantity = addProduct.chosenQuantity;
+                                    changeTextInLabel(this.label5, $"Desconto: R${this.totalDiscount}");
+                                    changeTextInLabel(this.label7, $"Valor Total: R${this.total:F2}");
+                                    changeTextInLabel(this.label4, $"Quantidade Produtos: {this.totalQuantity}");
+                                };
+                            }
+                        }
+                    }
+                    productCard.ContextMenuStrip.ItemClicked += menuItemClicked;
+                }
+
+                foreach (var product in db.Produtos.Include(p => p.Tipo).Include(p => p.ProdutoSolicitacaos).ToList())
+                {
+                    var productCard = new ProductCards();
+
+                    productCard.id = product.Id;
+                    productCard.Title = product.Nome;
+                    productCard.exp = product.Validade.ToString();
+                    productCard.product = product;
+                    productCard.Logo = Image.FromFile(File.Exists($"C:\\Users\\antol\\Downloads\\DataFiles\\Produtos\\{product.Id}.png") ? $"C:\\Users\\antol\\Downloads\\DataFiles\\Produtos\\{product.Id}.png" : "C:\\Users\\antol\\Downloads\\DataFiles\\Produtos\\0.png");
+                    productCard.price = (decimal)product.Valor;
+                    productCard.discount = 0;
+                    productCard.estoque = (int)product.Estoque;
+                    productCard.Type = product.Tipo.Nome;
+
+                    if (this.flowLayoutPanel2.Controls.OfType<ProductCards>().FirstOrDefault(x => x.id == productCard.id) == null)
+                    {
+                        this.flowLayoutPanel1.Controls.Add(productCard);
+                        wtv(productCard);
+                    }
+                    
+                }
+            }
+        }
+        private void showProductsInThisBullshitButNoSolicitation()
         {
             using (var db = new Sessao2Context())
             {
@@ -44,6 +176,7 @@ namespace PonteDourada
                 {
                     var productCard = new ProductCards();
 
+                    productCard.id = product.Id;
                     productCard.Title = product.Nome;
                     productCard.exp = product.Validade.ToString();
                     productCard.product = product;
@@ -57,7 +190,7 @@ namespace PonteDourada
 
                 foreach (Control control in this.flowLayoutPanel1.Controls)
                 {
-                    if (control is ProductCards productCard && this.flowLayoutPanel1.Controls.Find(productCard.Name, false).Length > 0)
+                    if (control is ProductCards productCard)
                     {
                         productCard.MouseDown += (s, e) =>
                         {
@@ -91,13 +224,14 @@ namespace PonteDourada
         private void flowLayoutPanel2_DragDrop(object sender, DragEventArgs e)
         {
             var productCard = (ProductCards)e.Data.GetData(typeof(ProductCards));
-            
+
             this.flowLayoutPanel2.Controls.Add(productCard);
             if (this.selectedProducts.ContainsKey(productCard))
             {
                 MessageBox.Show("Voce ja adicionou esse produto! Por favor, altere ou remova-o utilizando o botao direito do seu mouse.");
                 return;
             }
+            productCard.fornecedor = (string)this.comboBox1.SelectedValue;
             AddProductWindow addProduct = new AddProductWindow(productCard);
             addProduct.Show();
             addProduct.FormClosed += (s, e) =>
@@ -113,8 +247,9 @@ namespace PonteDourada
                 productCard.ContextMenuStrip = productCard.contextMenuStrip1;
 
                 var addedValue = (double)(productCard.price * addProduct.chosenQuantity) - productCard.discount;
+                var chosenQuantity = addProduct.chosenQuantity;
                 this.selectedProducts[productCard] = addProduct.chosenQuantity;
-                this.totalQuantity += addProduct.chosenQuantity;
+                this.totalQuantity += chosenQuantity;
                 this.totalDiscount += productCard.discount;
                 this.total += addedValue;
 
@@ -134,7 +269,7 @@ namespace PonteDourada
                             this.selectedProducts.Remove(productCard);
                             this.flowLayoutPanel1.Controls.Add(productCard);
                             this.flowLayoutPanel2.Controls.Remove(productCard);
-                            this.totalQuantity -= addProduct.chosenQuantity;
+                            this.totalQuantity -= chosenQuantity;
                             this.totalDiscount -= productCard.discount;
                             this.total -= addedValue;
 
@@ -146,6 +281,7 @@ namespace PonteDourada
                         }
                         else
                         {
+
                             AddProductWindow addProduct = new AddProductWindow(productCard);
                             addProduct.Show();
                             addProduct.FormClosed += (s, e) =>
@@ -160,24 +296,25 @@ namespace PonteDourada
 
                                 productCard.ContextMenuStrip = productCard.contextMenuStrip1;
 
-                                var addedValue = (double)(productCard.price * addProduct.chosenQuantity) - productCard.discount;
+                                var diff = addProduct.chosenQuantity - chosenQuantity;
                                 this.selectedProducts[productCard] = addProduct.chosenQuantity;
-                                this.totalQuantity = addProduct.chosenQuantity;
-                                this.totalDiscount = (this.totalDiscount - productCard.discount);
-                                this.total = addedValue;
+                                this.totalQuantity += diff;
+                                this.total += (double)productCard.price * diff;
 
+                                chosenQuantity = addProduct.chosenQuantity;
                                 changeTextInLabel(this.label5, $"Desconto: R${this.totalDiscount}");
                                 changeTextInLabel(this.label7, $"Valor Total: R${this.total:F2}");
                                 changeTextInLabel(this.label4, $"Quantidade Produtos: {this.totalQuantity}");
                             };
                         }
                     }
-                };
+                }
+                ;
 
                 productCard.ContextMenuStrip.ItemClicked += menuItemClicked;
             };
 
-            
+
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -292,6 +429,12 @@ namespace PonteDourada
                     ((ProductCards)control).Visible = true;
                 }
             }
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var details = new DetailWindow(this.selectedProducts);
+            details.Show();
         }
     }
 }

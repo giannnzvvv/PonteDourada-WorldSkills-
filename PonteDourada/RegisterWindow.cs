@@ -45,7 +45,7 @@ namespace PonteDourada
                 this.textBox2.Text = "1";
                 this.textBox2.Visible = false;
                 this.dateTimePicker1.Visible = true;
-                this.maskedTextBox2.Mask = "000/000/000-00";
+                this.maskedTextBox2.Mask = @"000\.000\.000-00";
                 this.label4.Text = "CPF";
 
             }
@@ -136,6 +136,11 @@ namespace PonteDourada
                 string telephoneNumber = this.textBox4.Text;
                 string cpf_cnpj = this.maskedTextBox2.Text;
 
+                if (db.Clientes.Any(x => x.Cpf == cpf_cnpj) || db.Fornecedors.Any(x => x.Cnpj == cpf_cnpj)) {
+                    MessageBox.Show($"Nao foi possivel criar o usuario, o campo de {this.label4.Text} ja existe no database, tente fazer login ou usar outro CPF.");
+                    return;
+                }
+
                 var pessoa = new Pessoa();
                 pessoa.Nome = name;
                 pessoa.Telefone = telephoneNumber;
@@ -146,6 +151,12 @@ namespace PonteDourada
                 usuario.Login = $"{username}@email.com";
                 usuario.IdNavigation = pessoa;
                 db.Usuarios.Add(usuario);
+
+                if (db.Usuarios.Any(x => x.Login == usuario.Login))
+                {
+                    MessageBox.Show($"Este usuario '{this.textBox5.Text}' ja foi cadastrado, por favor, utilize um novo ou faca login");
+                    return;
+                }
 
                 if (type == "Fornecedor") { 
                     var fornecedor = new Fornecedor();
