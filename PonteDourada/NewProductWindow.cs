@@ -50,7 +50,7 @@ namespace PonteDourada
                         if (File.Exists(filePath))
                         {
                             this.pictureBox1.ImageLocation += filePath;
-                            File.Copy(filePath, $"C:\\Users\\antol\\Downloads\\DataFiles\\Produtos\\{this.ChosenProduct.Id}.png", true);
+                            File.Copy(filePath, $"{AppContext.BaseDirectory}\\DataFiles\\Produtos\\{this.ChosenProduct.Id}.png", true);
                         }
                     }
                 }

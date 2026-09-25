@@ -38,10 +38,7 @@ namespace PonteDourada
                     medCard.expiration = solicitacao.Validade;
                     medCard.Title = $"Solicitacao de produtos de {string.Join(", ", idk)}.";
                     medCard.quantity = solicitacao.ProdutoSolicitacaos.Sum(x => x.Quantidade);
-                    medCard.imageOrWhatever = Image
-                        .FromFile(Path
-                        .Combine("C:\\Users\\antol\\Downloads\\DataFiles\\TiposProdutos", $"{products
-                        .MaxBy(x => x.Quantidade).Produto.Tipo.Nome}.png"));
+                    medCard.imageOrWhatever = Image.FromFile(Path.Combine($"{AppContext.BaseDirectory}\\DataFiles\\TiposProdutos", $"{products.MaxBy(x => x.Quantidade).Produto.Tipo.Nome}.png"));
 
                     medCard.id = solicitacao.Id;    
                     medCard.Desc = solicitacao.Descricao;

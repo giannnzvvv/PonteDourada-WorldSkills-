@@ -70,7 +70,7 @@ namespace PonteDourada
                     productCard.Title = product.Nome;
                     productCard.exp = product.Validade.ToString();
                     productCard.product = product;
-                    productCard.Logo = Image.FromFile(File.Exists($"C:\\Users\\antol\\Downloads\\DataFiles\\Produtos\\{product.Id}.png") ? $"C:\\Users\\antol\\Downloads\\DataFiles\\Produtos\\{product.Id}.png" : "C:\\Users\\antol\\Downloads\\DataFiles\\Produtos\\0.png");
+                    productCard.Logo = Image.FromFile(File.Exists($"{AppContext.BaseDirectory}\\DataFiles\\Produtos\\{product.Id}.png") ? $"{AppContext.BaseDirectory}\\DataFiles\\Produtos\\{product.Id}.png" : $"{AppContext.BaseDirectory}\\DataFiles\\Produtos\\0.png");
                     productCard.price = (decimal)product.Valor;
                     productCard.discount = (double)productSolicitation.Desconto;
                     productCard.estoque = (int)product.Estoque;
@@ -153,7 +153,7 @@ namespace PonteDourada
                     productCard.Title = product.Nome;
                     productCard.exp = product.Validade.ToString();
                     productCard.product = product;
-                    productCard.Logo = Image.FromFile(File.Exists($"C:\\Users\\antol\\Downloads\\DataFiles\\Produtos\\{product.Id}.png") ? $"C:\\Users\\antol\\Downloads\\DataFiles\\Produtos\\{product.Id}.png" : "C:\\Users\\antol\\Downloads\\DataFiles\\Produtos\\0.png");
+                    productCard.Logo = Image.FromFile(File.Exists($"{AppContext.BaseDirectory}\\DataFiles\\Produtos\\{product.Id}.png") ? $"{AppContext.BaseDirectory}\\DataFiles\\Produtos\\{product.Id}.png" : $"{AppContext.BaseDirectory}\\Downloads\\DataFiles\\Produtos\\0.png");
                     productCard.price = (decimal)product.Valor;
                     productCard.discount = 0;
                     productCard.estoque = (int)product.Estoque;
