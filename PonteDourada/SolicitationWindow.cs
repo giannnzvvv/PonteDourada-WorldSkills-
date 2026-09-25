@@ -24,7 +24,7 @@ namespace PonteDourada
             this.loginWindow = loginWindow;
         }
 
-        public void ShowProducts(string orderType = null)
+        public void ShowProducts()
         {
             using (var db = new Sessao2Context())
             {
@@ -39,6 +39,7 @@ namespace PonteDourada
                     medCard.imageOrWhatever = Image.FromFile(Path.Combine("C:\\Users\\antol\\Downloads\\DataFiles\\TiposProdutos", $"{solicitacao.Produto.Tipo.Nome}.png"));
                     medCard.Desc = solicitacao.Solicitcao.Descricao;
                     medCard.price += (decimal)(solicitacao.Produto.Valor * solicitacao.Quantidade ?? 0);
+                    medCard.cadastro = solicitacao.Solicitcao.DataHoraCadastro;
                     var expression = medCard.expiration.DayNumber - DateOnly.FromDateTime(DateTime.Today).DayNumber;
 
 
@@ -78,7 +79,10 @@ namespace PonteDourada
 
                     }
 
-                    this.flowLayoutPanel1.Controls.Add(medCard);
+                    if (flowLayoutPanel1.Controls.OfType<MedicationCard>().FirstOrDefault(x => x == medCard) == null)
+                    {
+                        this.flowLayoutPanel1.Controls.Add(medCard);
+                    }
                 }
 
             }
@@ -106,10 +110,10 @@ namespace PonteDourada
             switch (orderType)
             {
                 case "Lastest":
-                    controls = controls.OrderByDescending(x => x.expiration);
+                    controls = controls.OrderByDescending(x => x.cadastro);
                     break;
                 case "Oldest":
-                    controls = controls.OrderBy(x => x.expiration);
+                    controls = controls.OrderBy(x => x.cadastro);
                     break;
                 case "More":
                     controls = controls.OrderByDescending(x => x.quantity);
@@ -118,10 +122,10 @@ namespace PonteDourada
                     controls = controls.OrderBy(x => x.quantity);
                     break;
                 case "Closer":
-                    controls = controls.OrderByDescending(x => (x.expiration.DayNumber - DateOnly.FromDateTime(DateTime.Today).DayNumber) <= 7);
+                    controls = controls.OrderBy(x => x.expiration);
                     break;
                 case "Farther":
-                    controls = controls.OrderBy(x => (x.expiration.DayNumber - DateOnly.FromDateTime(DateTime.Today).DayNumber) <= 7);
+                    controls = controls.OrderByDescending(x => x.expiration);
                     break;
             }
 

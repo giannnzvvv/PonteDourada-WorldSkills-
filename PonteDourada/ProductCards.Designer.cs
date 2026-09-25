@@ -63,19 +63,19 @@
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { editarToolStripMenuItem, excluirToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 70);
+            contextMenuStrip1.Size = new Size(109, 48);
             contextMenuStrip1.Opening += contextMenuStrip1_Opening;
             // 
             // editarToolStripMenuItem
             // 
             editarToolStripMenuItem.Name = "editarToolStripMenuItem";
-            editarToolStripMenuItem.Size = new Size(180, 22);
+            editarToolStripMenuItem.Size = new Size(108, 22);
             editarToolStripMenuItem.Text = "Editar";
             // 
             // excluirToolStripMenuItem
             // 
             excluirToolStripMenuItem.Name = "excluirToolStripMenuItem";
-            excluirToolStripMenuItem.Size = new Size(180, 22);
+            excluirToolStripMenuItem.Size = new Size(108, 22);
             excluirToolStripMenuItem.Text = "Excluir";
             // 
             // ProductCards
@@ -83,11 +83,11 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BorderStyle = BorderStyle.FixedSingle;
-            ContextMenuStrip = contextMenuStrip1;
             Controls.Add(pictureBox1);
             Controls.Add(label1);
             Name = "ProductCards";
             Size = new Size(207, 201);
+            Load += ProductCards_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);

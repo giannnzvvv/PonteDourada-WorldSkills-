@@ -39,13 +39,20 @@ namespace PonteDourada
             using (this.openFileDialog1)
             {
                 this.openFileDialog1.Filter = "PNG Image (*.png)|*.png|All Files (*.*)|*.*";
-                this.openFileDialog1.Title = "Selecione um imagem";
+                this.openFileDialog1.Title = "Selecione uma imagem";
 
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                     string filePath = openFileDialog1.FileName;
 
-                    this.pictureBox1.ImageLocation += filePath;
+                    if (filePath != string.Empty && filePath != null)
+                    {
+                        if (File.Exists(filePath))
+                        {
+                            this.pictureBox1.ImageLocation += filePath;
+                            File.Copy(filePath, $"C:\\Users\\antol\\Downloads\\DataFiles\\Produtos\\{this.ChosenProduct.Id}.png", true);
+                        }
+                    }
                 }
             }
         }

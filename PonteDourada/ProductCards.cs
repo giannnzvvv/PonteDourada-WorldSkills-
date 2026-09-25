@@ -21,6 +21,12 @@ namespace PonteDourada
         {
 
         }
+
+        private void ProductCards_Load(object sender, EventArgs e)
+        {
+
+        }
+
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 

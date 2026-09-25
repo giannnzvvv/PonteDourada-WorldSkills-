@@ -49,6 +49,11 @@ namespace PonteDourada
         }
 
         [Browsable(true)]
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public DateTime cadastro { get; set; }
+
+        [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Image Logo
         {
